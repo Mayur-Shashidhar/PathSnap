@@ -1,0 +1,1 @@
+"""PathSnap Streamlit UI package."""

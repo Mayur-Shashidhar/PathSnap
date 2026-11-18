@@ -12,3 +12,6 @@ fastapi
 uvicorn
 streamlit
 requests
+pydantic-settings
+streamlit-folium
+pytest
