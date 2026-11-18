@@ -2,6 +2,7 @@ numpy
 pandas
 scipy
 scikit-learn
+networkx
 lightgbm
 optuna
 folium
