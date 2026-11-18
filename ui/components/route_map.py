@@ -32,13 +32,20 @@ def render_route_map(pred_data: Dict[str, Any], height: int = 540):
     min_lat, max_lat = min(lats), max(lats)
     min_lon, max_lon = min(lons), max(lons)
 
-    # Initialize Folium Map with clean cartodb positron or OpenStreetMap tiles
+    # Initialize Folium Map with clean, free OpenStreetMap and Esri tiles (no API key watermark)
     m = folium.Map(
         location=[center_lat, center_lon],
         zoom_start=14,
-        tiles="CartoDB positron",
+        tiles="OpenStreetMap",
         control_scale=True
     )
+
+    # Optional satellite / street tiles without watermarks
+    folium.TileLayer(
+        tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+        attr="Esri World Street Map",
+        name="Esri Streets"
+    ).add_to(m)
 
     # Layer 1: Predicted Road Route (Bold Red/Coral Polyline)
     if route_coords:
@@ -116,8 +123,5 @@ def render_route_map(pred_data: Dict[str, Any], height: int = 540):
     m.get_root().html.add_child(folium.Element(legend_html))
     folium.LayerControl(position="topright", collapsed=False).add_to(m)
 
-    # Render in Streamlit
-    if HAS_FOLIUM_STATIC:
-        folium_static(m, height=height)
-    else:
-        st.components.v1.html(m._repr_html_(), height=height + 20)
+    # Render in Streamlit (use HTML component for responsive full-width display)
+    st.components.v1.html(m._repr_html_(), height=height + 20)
